@@ -1,4 +1,4 @@
-import requests, json, shutil, time, hashlib, glob
+import requests, json, shutil, time, hashlib, glob, os
 
 all = {}
 errorout = open("errors.log", "a")
