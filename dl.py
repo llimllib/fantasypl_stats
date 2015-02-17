@@ -8,9 +8,9 @@ misses = 0
 playerurl = "http://fantasy.premierleague.com/web/api/elements/{}/"
 while 1:
     r = requests.get(playerurl.format(n))
-    n += 1
     if r.status_code != 200:
         misses += 1
+        n += 1
         # if we get 25 misses in a row, assume we've found all players
         if misses >= 25:
             break
@@ -25,6 +25,8 @@ while 1:
     except ValueError:
         print("failed parsing player {}".format(n))
         errorout.write("Failed to parse player {}: {}\n".format(n, r.content))
+
+    n += 1
 
 t = str(time.time()).split(".")[0]
 fn = "data/players.{}.json".format(t)
