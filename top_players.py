@@ -3,17 +3,28 @@ from collections import Counter
 import sys
 
 teams = json.load(open("top1k.current.json"))
-players = json.load(open("players.current.json"))
+allplayers = json.load(open("players.current.json"))
 startercount = Counter()
 benchcount = Counter()
+captains = Counter()
 
-for teamid, (starters, bench) in teams.iteritems():
-    for playerid in starters:
-        player = players[playerid]
-        startercount[player["web_name"]] += 1
-    for playerid in bench:
-        player = players[playerid]
-        benchcount[player["web_name"]] += 1
+def get(playerid):
+    return allplayers[str(playerid)]
+
+for teamid, players in teams.iteritems():
+    for player in players:
+        info = get(player["id"])
+        if player["sub"]:
+            benchcount[info["web_name"]] += 1
+        else:
+            startercount[info["web_name"]] += 1
+        if player["captain"]:
+            captains[info["web_name"]] += 1
+
+sys.stdout.write("------- captains ------\n")
+
+for player, count in captains.most_common():
+    sys.stdout.write("{}: {}\n".format(player.encode("utf8"), count))
 
 sys.stdout.write("------- starters ------\n")
 
