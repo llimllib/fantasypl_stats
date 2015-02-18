@@ -15,8 +15,12 @@ for teamid, (starters, bench) in teams.iteritems():
         player = players[playerid]
         benchcount[player["web_name"]] += 1
 
-#for player, count in startercount.most_common():
-#    sys.stdout.write("{}: {}\n".format(player.encode("utf8"), count))
+sys.stdout.write("------- starters ------")
+
+for player, count in startercount.most_common():
+    sys.stdout.write("{}: {}\n".format(player.encode("utf8"), count))
+
+sys.stdout.write("------- bench ------")
 
 for player, count in benchcount.most_common():
     sys.stdout.write("{}: {}\n".format(player.encode("utf8"), count))
