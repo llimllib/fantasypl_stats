@@ -5,7 +5,7 @@ import shutil
 import time
 
 PL = "http://fantasy.premierleague.com{}"
-pages = 20
+pages = 2
 
 teams = {}
 
@@ -16,9 +16,13 @@ for page in range(1, pages):
     for rank, teamlink in re.findall('<td>(\d+)</td>\s*?<td><a href="(.*?)"', res.text, re.S):
         teamid = re.search('entry/(\d+)', teamlink).group(1)
         res = requests.get(PL.format(teamlink))
-        player_ids = re.findall('<a href="#(\d+)" class="ismInfo', res.text)
-        starters, bench = player_ids[:11], player_ids[-4:]
-        teams[teamid] = [starters, bench]
+        player_json = [json.loads(i) for i in re.findall('ismPitchElement\s*({.*?})', res.text)]
+        players = [{"id": j["id"],
+                    "captain": j["is_captain"],
+                    "vice_captain": j["is_vice_captain"],
+                    "sub": False if not j["sub"] else True}
+                    for j in player_json]
+        teams[teamid] = players
 
 t = str(time.time()).split(".")[0]
 fn = "top1k/{}.json".format(t)
