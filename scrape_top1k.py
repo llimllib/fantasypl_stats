@@ -5,7 +5,7 @@ import shutil
 import time
 
 PL = "http://fantasy.premierleague.com{}"
-pages = 2
+pages = 20
 
 teams = {}
 
