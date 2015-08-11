@@ -17,56 +17,65 @@ positions = {
 def get(playerid):
     return allplayers[str(playerid)]
 
+def fullname(player):
+    return "{} {}".format(player["first_name"].encode("utf8"), player["second_name"].encode("utf8"))
+
 for teamid, players in teams.iteritems():
     for player in players:
-        info = get(player["id"])
-        position = info["type_name"]
-        name = info["web_name"]
-        points = info["event_total"]
-        positions[position][(name, points)] += 1
+        position = get(player["id"])["type_name"]
+        positions[position][player["id"]] += 1
+
         if player["sub"]:
-            benchcount[info["web_name"]] += 1
+            benchcount[player["id"]] += 1
         else:
-            startercount[info["web_name"]] += 1
+            startercount[player["id"]] += 1
         if player["captain"]:
-            captains[info["web_name"]] += 1
+            captains[player["id"]] += 1
 
 
 # Foo | Bar
 # ---|---
 # Foo | Bar
 sys.stdout.write("Goalkeeper | Points | Owned | Started | Captained\n")
-sys.stdout.write("---------- | ----- | ------ | -- | --\n")
+sys.stdout.write("-- | -- | -- | -- | --\n")
 
-for player, count in positions["Goalkeeper"].most_common(20):
-    name, points = player
-    captained = captains[name]
-    started = startercount[name]
-    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name.encode("utf8"), points, count, started, captained))
+for player_id, count in positions["Goalkeeper"].most_common(20):
+    player = get(player_id)
+    name = fullname(player)
+    points = player["event_points"]
+    captained = captains[player_id]
+    started = startercount[player_id]
+    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name, points, count, started, captained))
 
 sys.stdout.write("\nDefender | Points | Owned | Started | Captained\n")
 sys.stdout.write("---------- | ----- | -- | -- | --\n")
 
-for player, count in positions["Defender"].most_common(30):
-    name, points = player
-    captained = captains[name]
-    started = startercount[name]
-    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name.encode("utf8"), points, count, started, captained))
+for player_id, count in positions["Defender"].most_common(30):
+    player = get(player_id)
+    name = fullname(player)
+    points = player["event_points"]
+    captained = captains[player_id]
+    started = startercount[player_id]
+    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name, points, count, started, captained))
 
 sys.stdout.write("\nMidfielder | Points | Owned | Started | Captained\n")
 sys.stdout.write("---------- | ----- | -- | -- | --\n")
 
-for player, count in positions["Midfielder"].most_common(30):
-    name, points = player
-    captained = captains[name]
-    started = startercount[name]
-    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name.encode("utf8"), points, count, started, captained))
+for player_id, count in positions["Midfielder"].most_common(30):
+    player = get(player_id)
+    name = fullname(player)
+    points = player["event_points"]
+    captained = captains[player_id]
+    started = startercount[player_id]
+    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name, points, count, started, captained))
 
 sys.stdout.write("\nForward | Points | Owned | Started | Captained\n")
 sys.stdout.write("---------- | ----- | ------ | -------- | --\n")
 
-for player, count in positions["Forward"].most_common(30):
-    name, points = player
-    captained = captains[name]
-    started = startercount[name]
-    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name.encode("utf8"), points, count, started, captained))
+for player_id, count in positions["Forward"].most_common(30):
+    player = get(player_id)
+    name = fullname(player)
+    points = player["event_points"]
+    captained = captains[player_id]
+    started = startercount[player_id]
+    sys.stdout.write("{} | {} | {} | {} | {}\n".format(name, points, count, started, captained))
