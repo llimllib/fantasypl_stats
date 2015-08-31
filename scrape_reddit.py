@@ -5,8 +5,9 @@ import requests
 import shutil
 import time
 
+# http://fantasy.premierleague.com/my-leagues/1466/standings/?ls-page=86
 PL = "http://fantasy.premierleague.com{}"
-pages = 86
+pages = 88
 
 teams = {}
 
