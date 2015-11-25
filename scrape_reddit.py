@@ -7,13 +7,14 @@ import time
 
 # http://fantasy.premierleague.com/my-leagues/1466/standings/?ls-page=86
 PL = "http://fantasy.premierleague.com{}"
-pages = 88
+pages = 94
 
 teams = {}
 
 for page in range(1, pages):
     if page % 2 == 0: print("page {}".format(page))
     link = "/my-leagues/1466/standings/?ls-page={}".format(page)
+    print("getting link {}".format(PL.format(link)))
     res = requests.get(PL.format(link))
     for rank, teamlink in re.findall('<td>([\d,]+)</td>\s*?<td><a href="(.*?)"', res.text, re.S):
         teamid = re.search('entry/(\d+)', teamlink).group(1)
