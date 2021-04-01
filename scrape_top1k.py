@@ -11,12 +11,13 @@ teams = {}
 
 for page in range(1, pages):
     if page % 2 == 0: print("page {}".format(page))
-    link = "/my-leagues/313/standings/?ls-page={}".format(page)
-    res = requests.get(PL.format(link))
-    for rank, teamlink in re.findall('<td>(\d+)</td>\s*?<td><a href="(.*?)"', res.text, re.S):
-        teamid = re.search('entry/(\d+)', teamlink).group(1)
-        res = requests.get(PL.format(teamlink))
-        player_json = [json.loads(i) for i in re.findall('ismPitchElement\s*({.*?})', res.text)]
+    teamlink = "/drf/entry/{}/event/6/picks"
+    link = "/drf/leagues-classic-standings/313?phase=1&le-page=1&ls-page={}"
+    res = requests.get(PL.format(link)).json()
+    for team in teams['standings']:
+        teamid = team['entry']
+        team_roster = requests.get(PL.format(teamlink.format(teamid))).json()
+        players = team_roster['picks']
         players = [{"id": j["id"],
                     "captain": j["is_captain"],
                     "vice_captain": j["is_vice_captain"],
